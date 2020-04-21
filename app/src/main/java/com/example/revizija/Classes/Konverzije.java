@@ -34,4 +34,31 @@ public class Konverzije
             return new ArrayList<JSONKlijent>();
         }
     }
+
+    public static ArrayList<JSONKnjiga> JSONArray2KnjigaArray(JSONArray json ){
+        ArrayList<JSONKnjiga> returnLista = new ArrayList<JSONKnjiga>();
+        if(json!= null){
+            for(int i= 0; i<json.length();i++){
+                JSONKnjiga k = new JSONKnjiga();
+                try
+                {
+                    k.id = json.getJSONObject(i).getInt("id");
+                    k.godina = json.getJSONObject(i).getInt("godina");
+                    k.opis = json.getJSONObject(i).getString("opis");
+                    k.klijent_naziv = json.getJSONObject(i).getString("klijent_naziv");
+                    returnLista.add(k);
+                }
+                catch (JSONException e)
+                {
+                    e.printStackTrace();
+                    return new ArrayList<JSONKnjiga>();
+                }
+
+            }
+            return returnLista;
+        }
+        else{
+            return new ArrayList<JSONKnjiga>();
+        }
+    }
 }

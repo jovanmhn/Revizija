@@ -7,6 +7,30 @@ public class JSONKnjiga
     public String opis;
     public String klijent_naziv;
 
+    public JSONKnjiga()
+    {
+    }
+
+    public int getId()
+    {
+        return id;
+    }
+
+    public int getGodina()
+    {
+        return godina;
+    }
+
+    public String getOpis()
+    {
+        return opis;
+    }
+
+    public String getKlijent_naziv()
+    {
+        return klijent_naziv;
+    }
+
     public JSONKnjiga(int id, int godina, String opis, String klijent_naziv)
     {
         this.id = id;

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -30,6 +31,19 @@ public class KlijentiActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_klijenti);
+
+        lv = findViewById(R.id.listviewmain);
+        lv.setClickable(true);
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                JSONKlijent o = (JSONKlijent) lv.getItemAtPosition(i);
+
+                Intent intent = new Intent(getApplicationContext(),KnjigeActivity.class);
+                intent.putExtra("id_klijent", o.id_klijent);
+                startActivity(intent);
+            }
+        });
 
         AsyncSRANJEJAVA thread = new AsyncSRANJEJAVA();
         thread.start();

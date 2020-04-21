@@ -253,4 +253,113 @@ public class API
             return new APIKlijentiResult(LoginResult.ServerError, lista_klijenata);
         }
     }
+    public static class APIKnjigeResult
+    {
+        public LoginResult requestState;
+        public ArrayList<JSONKnjiga> lista_knjiga;
+
+        public APIKnjigeResult(LoginResult loginState, ArrayList<JSONKnjiga> lista)
+        {
+            this.requestState = loginState;
+            this.lista_knjiga = lista;
+        }
+    }
+    public static APIKnjigeResult GetKnjige(int id_klijent)
+    {
+        HttpURLConnection urlConnection = null;
+        ArrayList<JSONKnjiga> lista_knjiga = new ArrayList<JSONKnjiga>();
+
+        android.net.Uri.Builder builder = new android.net.Uri.Builder();
+        builder.scheme("http")
+                .encodedAuthority("192.168.1.131:1991")
+                .appendPath("api")
+                .appendPath("knjigas")
+                .appendPath( String.valueOf(id_klijent) );
+        //.appendQueryParameter("klijent", editText.getText().toString());
+
+
+        URL url = null;
+        try
+        {
+            url = new URL(builder.build().toString());
+        } catch (MalformedURLException e)
+        {
+            e.printStackTrace();
+            return new APIKnjigeResult(LoginResult.ServerError, lista_knjiga);
+        }
+
+        try
+        {
+            urlConnection = (HttpURLConnection) url.openConnection();
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+            return new APIKnjigeResult(LoginResult.ServerError, lista_knjiga);
+        }
+
+        try
+        {
+            urlConnection.setRequestMethod("GET");
+        } catch (ProtocolException e)
+        {
+            e.printStackTrace();
+            return new APIKnjigeResult(LoginResult.ServerError, lista_knjiga);
+        }
+        urlConnection.setReadTimeout(10000 /* milliseconds */);
+        urlConnection.setConnectTimeout(15000 /* milliseconds */);
+        //urlConnection.setDoOutput(true);
+        try
+        {
+            urlConnection.connect();
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+            return new APIKnjigeResult(LoginResult.ServerError, lista_knjiga);
+        }
+
+        JSONOperater operater = new JSONOperater();
+        try
+        {
+            int response = urlConnection.getResponseCode();
+            if (urlConnection.getResponseCode() == 200)
+            {
+                BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));
+
+                char[] buffer = new char[1024];
+
+                String jsonString = new String();
+
+                StringBuilder sb = new StringBuilder();
+                String line;
+                while ((line = br.readLine()) != null)
+                {
+                    sb.append(line + "\n");
+                }
+                br.close();
+
+                jsonString = sb.toString();
+                System.out.println("JSON: " + jsonString);
+                JSONArray array = new JSONArray(jsonString);
+                lista_knjiga = Konverzije.JSONArray2KnjigaArray(array);
+                return new APIKnjigeResult(LoginResult.Success, lista_knjiga);
+            }
+            else if( urlConnection.getResponseCode() == 400 )
+            {
+                return new APIKnjigeResult(LoginResult.Failed, lista_knjiga);
+            }
+            else
+            {
+                return new APIKnjigeResult(LoginResult.ServerError, lista_knjiga);
+            }
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+            return new APIKnjigeResult(LoginResult.ServerError, lista_knjiga);
+        } catch (JSONException e)
+        {
+            e.printStackTrace();
+            return new APIKnjigeResult(LoginResult.ServerError, lista_knjiga);
+        }
+    }
 }
