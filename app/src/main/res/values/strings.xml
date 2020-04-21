@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Revizija</string>
+    <string name="btn_login">Prijavi se</string>
+    <string name="username">Korisničko ime</string>
+    <string name="password">Lozinka</string>
+    <string name="login_username">login_username</string>
+    <string name="login_password">login_password</string>
+    <string name="save_login">save_login</string>
+</resources>
