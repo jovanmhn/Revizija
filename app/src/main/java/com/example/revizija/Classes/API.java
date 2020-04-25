@@ -9,6 +9,7 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
@@ -360,6 +361,93 @@ public class API
         {
             e.printStackTrace();
             return new APIKnjigeResult(LoginResult.ServerError, lista_knjiga);
+        }
+    }
+    public static LoginResult UploadImage(int id_knjiga, String image64, String naziv)
+    {
+        HttpURLConnection urlConnection = null;
+        ArrayList<JSONKnjiga> lista_knjiga = new ArrayList<JSONKnjiga>();
+
+        android.net.Uri.Builder builder = new android.net.Uri.Builder();
+        builder.scheme("http")
+                .encodedAuthority("192.168.1.131:1991")
+                //.encodedAuthority("localhost:44300")
+                .appendPath("api")
+                .appendPath("knjigas")
+                .appendPath("upload2DMS")
+                .appendPath( String.valueOf(id_knjiga) )
+                .appendPath(naziv);
+        //.appendQueryParameter("klijent", editText.getText().toString());
+
+
+        URL url = null;
+        try
+        {
+            url = new URL(builder.build().toString());
+        } catch (MalformedURLException e)
+        {
+            e.printStackTrace();
+            return LoginResult.ServerError;
+        }
+
+        try
+        {
+            urlConnection = (HttpURLConnection) url.openConnection();
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+            return LoginResult.ServerError;
+        }
+
+        try
+        {
+            urlConnection.setRequestMethod("PUT");
+        } catch (ProtocolException e)
+        {
+            e.printStackTrace();
+            return LoginResult.ServerError;
+        }
+        urlConnection.setReadTimeout(10000 /* milliseconds */);
+        urlConnection.setConnectTimeout(15000 /* milliseconds */);
+        //urlConnection.setDoOutput(true);
+        try
+        {
+            urlConnection.connect();
+            OutputStream os =  urlConnection.getOutputStream();
+            os.write(image64.getBytes());
+            os.close();
+
+        } catch (IOException e)
+        {
+            //urlConnection.disconnect();
+            e.printStackTrace();
+            return LoginResult.ServerError;
+        }
+
+
+        try
+        {
+            if (urlConnection.getResponseCode() == 200)
+            {
+                //urlConnection.disconnect();
+                return LoginResult.Success;
+            }
+
+            if( urlConnection.getResponseCode() == 400 )
+            {
+                //urlConnection.disconnect();
+                return LoginResult.Failed;
+            }
+            else
+            {
+                //urlConnection.disconnect();
+                return LoginResult.ServerError;
+            }
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+            return LoginResult.ServerError;
         }
     }
 }

@@ -1,9 +1,12 @@
 package com.example.revizija.Activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.view.View;
 import android.widget.Adapter;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -14,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.revizija.Adapters.KnjigeAdapter;
 import com.example.revizija.Classes.API;
+import com.example.revizija.Classes.JSONKlijent;
 import com.example.revizija.Classes.JSONKnjiga;
 import com.example.revizija.R;
 
@@ -31,9 +35,22 @@ public class KnjigeActivity extends AppCompatActivity
     protected void onCreate(@Nullable Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_klijenti);
+        setContentView(R.layout.activity_knjige);
         tv = findViewById(R.id.textviewNaslov);
         tv.setText("Lista knjiga");
+
+        lv = findViewById(R.id.listviewmainKnjige);
+        lv.setClickable(true);
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                JSONKnjiga o = (JSONKnjiga) lv.getItemAtPosition(i);
+
+                Intent intent = new Intent(getApplicationContext(),UploadActivity.class);
+                intent.putExtra("id_knjiga", o.id);
+                startActivity(intent);
+            }
+        });
 
         AsyncLoad thread = new AsyncLoad();
         thread.start();
@@ -58,7 +75,7 @@ public class KnjigeActivity extends AppCompatActivity
                     public void run()
                     {
                         lista = result.lista_knjiga;
-                        lv = findViewById(R.id.listviewmain);
+                        lv = findViewById(R.id.listviewmainKnjige);
                         Collections.sort(lista, new KnjigaGodinaDesc());
                         adapter = new KnjigeAdapter(getApplicationContext(),R.layout.adapter_view_knjige, lista );
 
