@@ -1,0 +1,52 @@
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Other components and views -->
+    <ImageView
+        android:id="@+id/imageViewUpload"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="center"
+        app:srcCompat="@drawable/ic_add_a_photo_black_150dp"
+        android:layout_marginBottom="50dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"/>
+
+    <com.google.android.material.bottomappbar.BottomAppBar
+        android:id="@+id/bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:backgroundTint="@color/colorPrimary"
+        app:fabAlignmentMode="end"/>
+        <!--app:navigationIcon="@drawable/ic_menu_24"/> -->
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/buttonUpload"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/upload_selector"
+        app:layout_anchor="@id/bar"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/buttonLoad"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginStart="15dp"
+        android:layout_marginBottom="5dp"
+        android:backgroundTint="@color/colorAccent"
+        android:text="Odaberi fajl..."
+        android:textColor="@color/design_default_color_on_secondary"
+        app:icon="@drawable/ic_folder_open_black_24dp"
+        app:iconTint="@color/material_on_background_emphasis_high_type" />
+
+
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

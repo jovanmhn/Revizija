@@ -25,6 +25,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.revizija.Adapters.KlijentiAdapter;
 import com.example.revizija.Classes.API;
 import com.example.revizija.R;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -34,14 +36,14 @@ public class UploadActivity extends AppCompatActivity
 {
     ImageView iv;
     Button btnLoad;
-    Button btnUpload;
+    FloatingActionButton btnUpload;
     String image;
     String naziv_fajla;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_upload);
+        setContentView(R.layout.material_upload);
         iv = findViewById(R.id.imageViewUpload);
         btnLoad = findViewById(R.id.buttonLoad);
         btnUpload = findViewById(R.id.buttonUpload);
@@ -59,7 +61,6 @@ public class UploadActivity extends AppCompatActivity
                 startActivityForResult(photoPickerIntent, 1);
             }
         });
-
         btnUpload.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -73,8 +74,8 @@ public class UploadActivity extends AppCompatActivity
                 image = Base64.encodeToString(imageInByte,Base64.DEFAULT);
 
                 //Alert dialog nebuloza
-                AlertDialog.Builder builder = new AlertDialog.Builder(UploadActivity.this);
-                builder.setTitle("Naziv");
+                MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(UploadActivity.this);
+                builder.setTitle("Unesi naziv:");
                 final EditText input = new EditText(UploadActivity.this);
                 input.setInputType(InputType.TYPE_CLASS_TEXT /*| InputType.TYPE_TEXT_VARIATION_PASSWORD*/);
                 builder.setView(input);
@@ -87,12 +88,21 @@ public class UploadActivity extends AppCompatActivity
                         thread.start();
                     }
                 });
+                builder.setNeutralButton("Odustani", new DialogInterface.OnClickListener()
+                {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i)
+                    {
+
+                    }
+                });
                 builder.show();
                 //
 
 
             }
         });
+        btnUpload.setEnabled(false);
     }
     public class UploadAsync extends Thread
     {
@@ -107,6 +117,14 @@ public class UploadActivity extends AppCompatActivity
         public void run()
         {
             Handler handler = new Handler(Looper.getMainLooper());
+            handler.post(new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    btnUpload.setEnabled(false);
+                }
+            });
             API.LoginResult result = API.UploadImage(52,image, Naziv);
             if(result == API.LoginResult.Failed)
             {
@@ -116,6 +134,7 @@ public class UploadActivity extends AppCompatActivity
                     public void run()
                     {
                         Toast.makeText(getApplicationContext(),"Doslo je do greske prilikom uploada", Toast.LENGTH_LONG).show();
+                        btnUpload.setEnabled(true);
                     }
                 });
 
@@ -128,6 +147,7 @@ public class UploadActivity extends AppCompatActivity
                     public void run()
                     {
                         Toast.makeText(getApplicationContext(),"upload uspjesan", Toast.LENGTH_LONG).show();
+                        btnUpload.setEnabled(true);
                     }
                 });
 
@@ -148,6 +168,7 @@ public class UploadActivity extends AppCompatActivity
             {
                 bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(targetUri));
                 iv.setImageBitmap(bitmap);
+                btnUpload.setEnabled(true);
             } catch (FileNotFoundException e)
             {
                 // TODO Auto-generated catch block
