@@ -363,7 +363,7 @@ public class API
             return new APIKnjigeResult(LoginResult.ServerError, lista_knjiga);
         }
     }
-    public static LoginResult UploadImage(int id_knjiga, String image64, String naziv)
+    public static LoginResult UploadImage(int id_knjiga, byte[] imageInBytes, String naziv)
     {
         HttpURLConnection urlConnection = null;
         ArrayList<JSONKnjiga> lista_knjiga = new ArrayList<JSONKnjiga>();
@@ -374,7 +374,7 @@ public class API
                 //.encodedAuthority("localhost:44300")
                 .appendPath("api")
                 .appendPath("knjigas")
-                .appendPath("upload2DMS")
+                .appendPath("upload")
                 .appendPath( String.valueOf(id_knjiga) )
                 .appendPath(naziv);
         //.appendQueryParameter("klijent", editText.getText().toString());
@@ -414,7 +414,8 @@ public class API
         {
             urlConnection.connect();
             OutputStream os =  urlConnection.getOutputStream();
-            os.write(image64.getBytes());
+            //os.write(image64.getBytes());
+            os.write(imageInBytes);
             os.close();
 
         } catch (IOException e)

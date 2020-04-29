@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -38,7 +39,9 @@ public class UploadActivity extends AppCompatActivity
     Button btnLoad;
     FloatingActionButton btnUpload;
     String image;
+    byte[] imageInByte;
     String naziv_fajla;
+    ProgressBar progressBar;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState)
     {
@@ -47,6 +50,7 @@ public class UploadActivity extends AppCompatActivity
         iv = findViewById(R.id.imageViewUpload);
         btnLoad = findViewById(R.id.buttonLoad);
         btnUpload = findViewById(R.id.buttonUpload);
+        progressBar = findViewById(R.id.progressBar_upload);
 
         btnLoad.setOnClickListener(new View.OnClickListener()
         {
@@ -70,8 +74,8 @@ public class UploadActivity extends AppCompatActivity
                 Bitmap bitmap = bitmapDrawable .getBitmap();
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-                byte[] imageInByte = stream.toByteArray();
-                image = Base64.encodeToString(imageInByte,Base64.DEFAULT);
+                imageInByte = stream.toByteArray();
+                //image = Base64.encodeToString(imageInByte,Base64.DEFAULT);
 
                 //Alert dialog nebuloza
                 MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(UploadActivity.this);
@@ -103,6 +107,7 @@ public class UploadActivity extends AppCompatActivity
             }
         });
         btnUpload.setEnabled(false);
+        progressBar.setVisibility(View.GONE);
     }
     public class UploadAsync extends Thread
     {
@@ -123,9 +128,10 @@ public class UploadActivity extends AppCompatActivity
                 public void run()
                 {
                     btnUpload.setEnabled(false);
+                    progressBar.setVisibility(View.VISIBLE);
                 }
             });
-            API.LoginResult result = API.UploadImage(52,image, Naziv);
+            API.LoginResult result = API.UploadImage(52,imageInByte, Naziv);
             if(result == API.LoginResult.Failed)
             {
                 handler.post(new Runnable()
@@ -135,6 +141,7 @@ public class UploadActivity extends AppCompatActivity
                     {
                         Toast.makeText(getApplicationContext(),"Doslo je do greske prilikom uploada", Toast.LENGTH_LONG).show();
                         btnUpload.setEnabled(true);
+                        progressBar.setVisibility(View.GONE);
                     }
                 });
 
@@ -146,8 +153,9 @@ public class UploadActivity extends AppCompatActivity
                     @Override
                     public void run()
                     {
-                        Toast.makeText(getApplicationContext(),"upload uspjesan", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(),"Dokument uspješno dodat u DMS klijenta.", Toast.LENGTH_LONG).show();
                         btnUpload.setEnabled(true);
+                        progressBar.setVisibility(View.GONE);
                     }
                 });
 
@@ -168,6 +176,7 @@ public class UploadActivity extends AppCompatActivity
             {
                 bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(targetUri));
                 iv.setImageBitmap(bitmap);
+                iv.setScaleType(ImageView.ScaleType.FIT_CENTER);
                 btnUpload.setEnabled(true);
             } catch (FileNotFoundException e)
             {
