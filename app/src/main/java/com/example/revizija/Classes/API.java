@@ -1,5 +1,7 @@
 package com.example.revizija.Classes;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.widget.EditText;
 
 import org.json.JSONArray;
@@ -19,14 +21,16 @@ import java.util.ArrayList;
 
 public class API
 {
-    public static APILoginResult login(String username, String password)
+
+    public static APILoginResult login( Context context, String username, String password)
     {
         HttpURLConnection urlConnection = null;
 
+        SharedPreferences sharedPref_api = context.getSharedPreferences("API", Context.MODE_PRIVATE);
 
         android.net.Uri.Builder builder = new android.net.Uri.Builder();
         builder.scheme("http")
-                .encodedAuthority("192.168.1.131:1991")
+                .encodedAuthority(sharedPref_api.getString("API",""))
                 .appendPath("api")
                 .appendPath("operater")
                 .appendPath("login")
@@ -156,14 +160,15 @@ public class API
         Failed,
         ServerError,
     }
-    public static APIKlijentiResult GetKlijenti()
+    public static APIKlijentiResult GetKlijenti(Context context)
     {
         HttpURLConnection urlConnection = null;
         ArrayList<JSONKlijent> lista_klijenata = new ArrayList<JSONKlijent>();
+        SharedPreferences sharedPref_api = context.getSharedPreferences("API", Context.MODE_PRIVATE);
 
         android.net.Uri.Builder builder = new android.net.Uri.Builder();
         builder.scheme("http")
-                .encodedAuthority("192.168.1.131:1991")
+                .encodedAuthority(sharedPref_api.getString("API",""))
                 .appendPath("api")
                 .appendPath("klijents");
                 //.appendPath("login")
@@ -265,14 +270,15 @@ public class API
             this.lista_knjiga = lista;
         }
     }
-    public static APIKnjigeResult GetKnjige(int id_klijent)
+    public static APIKnjigeResult GetKnjige(Context context, int id_klijent)
     {
         HttpURLConnection urlConnection = null;
         ArrayList<JSONKnjiga> lista_knjiga = new ArrayList<JSONKnjiga>();
+        SharedPreferences sharedPref_api = context.getSharedPreferences("API", Context.MODE_PRIVATE);
 
         android.net.Uri.Builder builder = new android.net.Uri.Builder();
         builder.scheme("http")
-                .encodedAuthority("192.168.1.131:1991")
+                .encodedAuthority(sharedPref_api.getString("API",""))
                 .appendPath("api")
                 .appendPath("knjigas")
                 .appendPath( String.valueOf(id_klijent) );
@@ -363,14 +369,15 @@ public class API
             return new APIKnjigeResult(LoginResult.ServerError, lista_knjiga);
         }
     }
-    public static LoginResult UploadImage(int id_knjiga, byte[] imageInBytes, String naziv)
+    public static LoginResult UploadImage(Context context,int id_knjiga, byte[] imageInBytes, String naziv)
     {
         HttpURLConnection urlConnection = null;
         ArrayList<JSONKnjiga> lista_knjiga = new ArrayList<JSONKnjiga>();
+        SharedPreferences sharedPref_api = context.getSharedPreferences("API", Context.MODE_PRIVATE);
 
         android.net.Uri.Builder builder = new android.net.Uri.Builder();
         builder.scheme("http")
-                .encodedAuthority("192.168.1.131:1991")
+                .encodedAuthority(sharedPref_api.getString("API",""))
                 //.encodedAuthority("localhost:44300")
                 .appendPath("api")
                 .appendPath("knjigas")

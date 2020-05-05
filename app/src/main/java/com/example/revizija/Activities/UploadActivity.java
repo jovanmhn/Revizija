@@ -131,7 +131,7 @@ public class UploadActivity extends AppCompatActivity
                     progressBar.setVisibility(View.VISIBLE);
                 }
             });
-            API.LoginResult result = API.UploadImage(52,imageInByte, Naziv);
+            API.LoginResult result = API.UploadImage(getApplicationContext(),52,imageInByte, Naziv);
             if(result == API.LoginResult.Failed)
             {
                 handler.post(new Runnable()

@@ -57,7 +57,7 @@ public class KlijentiActivity extends AppCompatActivity
             Handler handler = new Handler(Looper.getMainLooper());
 
 
-            final API.APIKlijentiResult result =  API.GetKlijenti();
+            final API.APIKlijentiResult result =  API.GetKlijenti(getApplicationContext());
 
            if(result.requestState == API.LoginResult.Success){
                handler.post(new Runnable()

@@ -66,7 +66,7 @@ public class KnjigeActivity extends AppCompatActivity
             {
                 id_klijent = extras.getInt("id_klijent");
             }
-            final API.APIKnjigeResult result =  API.GetKnjige(id_klijent);
+            final API.APIKnjigeResult result =  API.GetKnjige(getApplicationContext(), id_klijent);
 
             if(result.requestState == API.LoginResult.Success){
                 handler.post(new Runnable()
