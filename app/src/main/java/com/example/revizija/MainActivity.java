@@ -155,9 +155,9 @@ public class MainActivity extends AppCompatActivity
                     }
                 });
                 Bundle bundle = new Bundle();
-                //bundle.putSerializable("OPERATER", (Serializable) login_result.logovani_operater);
+                bundle.putSerializable("OPERATER", (Serializable) login_result.logovani_operater);
                 Intent intent = new Intent(getApplicationContext(), KlijentiActivity.class);
-                //intent.putExtras(bundle);
+                intent.putExtras(bundle);
                 startActivity(intent);
 
             }

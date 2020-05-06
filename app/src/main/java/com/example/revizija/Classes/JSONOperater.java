@@ -1,6 +1,8 @@
 package com.example.revizija.Classes;
 
-public class JSONOperater
+import java.io.Serializable;
+
+public class JSONOperater implements Serializable
 {
     public int id_operater ;
     public String username ;

@@ -14,8 +14,8 @@
         android:indeterminate="true"
         android:layout_gravity="top"/>
 
-    <ImageView
-        android:id="@+id/imageViewUpload"
+    <com.github.chrisbanes.photoview.PhotoView
+        android:id="@+id/photoViewUpload"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginLeft="10dp"

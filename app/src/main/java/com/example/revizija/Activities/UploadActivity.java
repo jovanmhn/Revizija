@@ -25,7 +25,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.revizija.Adapters.KlijentiAdapter;
 import com.example.revizija.Classes.API;
+import com.example.revizija.Classes.JSONOperater;
 import com.example.revizija.R;
+import com.github.chrisbanes.photoview.PhotoView;
+import com.github.chrisbanes.photoview.PhotoViewAttacher;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -35,22 +38,30 @@ import java.io.FileNotFoundException;
 
 public class UploadActivity extends AppCompatActivity
 {
-    ImageView iv;
+    PhotoView iv;
     Button btnLoad;
     FloatingActionButton btnUpload;
     String image;
     byte[] imageInByte;
     String naziv_fajla;
     ProgressBar progressBar;
+    int id_knjiga;
+    private JSONOperater logovani_operater;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.material_upload);
-        iv = findViewById(R.id.imageViewUpload);
+        iv = (PhotoView) findViewById(R.id.photoViewUpload);
+
         btnLoad = findViewById(R.id.buttonLoad);
         btnUpload = findViewById(R.id.buttonUpload);
         progressBar = findViewById(R.id.progressBar_upload);
+
+        Intent intent = getIntent();
+        Bundle bundle = intent.getExtras();
+        logovani_operater = (JSONOperater) bundle.getSerializable("OPERATER");
+        id_knjiga = bundle.getInt("id_knjiga");
 
         btnLoad.setOnClickListener(new View.OnClickListener()
         {
@@ -131,7 +142,7 @@ public class UploadActivity extends AppCompatActivity
                     progressBar.setVisibility(View.VISIBLE);
                 }
             });
-            API.LoginResult result = API.UploadImage(getApplicationContext(),52,imageInByte, Naziv);
+            API.LoginResult result = API.UploadImage(getApplicationContext(),id_knjiga,imageInByte, Naziv, logovani_operater.id_operater);
             if(result == API.LoginResult.Failed)
             {
                 handler.post(new Runnable()

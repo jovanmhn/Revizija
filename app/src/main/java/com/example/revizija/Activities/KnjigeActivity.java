@@ -19,8 +19,10 @@ import com.example.revizija.Adapters.KnjigeAdapter;
 import com.example.revizija.Classes.API;
 import com.example.revizija.Classes.JSONKlijent;
 import com.example.revizija.Classes.JSONKnjiga;
+import com.example.revizija.Classes.JSONOperater;
 import com.example.revizija.R;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -30,6 +32,7 @@ public class KnjigeActivity extends AppCompatActivity
     private TextView tv;
     private ListView lv;
     private ArrayList<JSONKnjiga> lista;
+    private JSONOperater logovani_operater;
     KnjigeAdapter adapter;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState)
@@ -38,6 +41,9 @@ public class KnjigeActivity extends AppCompatActivity
         setContentView(R.layout.activity_knjige);
         tv = findViewById(R.id.textviewNaslov);
         tv.setText("Lista knjiga");
+        Intent intent = getIntent();
+        Bundle bundle = intent.getExtras();
+        logovani_operater = (JSONOperater) bundle.getSerializable("OPERATER");
 
         lv = findViewById(R.id.listviewmainKnjige);
         lv.setClickable(true);
@@ -46,8 +52,12 @@ public class KnjigeActivity extends AppCompatActivity
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 JSONKnjiga o = (JSONKnjiga) lv.getItemAtPosition(i);
 
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("OPERATER", (Serializable) logovani_operater);
+                bundle.putInt("id_knjiga", o.id);
                 Intent intent = new Intent(getApplicationContext(),UploadActivity.class);
-                intent.putExtra("id_knjiga", o.id);
+                //intent.putExtra("id_knjiga", o.id);
+                intent.putExtras(bundle);
                 startActivity(intent);
             }
         });

@@ -16,8 +16,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.revizija.Adapters.KlijentiAdapter;
 import com.example.revizija.Classes.API;
 import com.example.revizija.Classes.JSONKlijent;
+import com.example.revizija.Classes.JSONOperater;
 import com.example.revizija.R;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 public class KlijentiActivity extends AppCompatActivity
@@ -25,12 +27,16 @@ public class KlijentiActivity extends AppCompatActivity
     ArrayList<JSONKlijent> lista = new ArrayList<JSONKlijent>();
     KlijentiAdapter adapter;
     private ListView lv;
+    JSONOperater logovani_operater;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_klijenti);
+        Intent intent = getIntent();
+        Bundle bundle = intent.getExtras();
+        logovani_operater = (JSONOperater) bundle.getSerializable("OPERATER");
 
         lv = findViewById(R.id.listviewmain);
         lv.setClickable(true);
@@ -39,8 +45,12 @@ public class KlijentiActivity extends AppCompatActivity
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 JSONKlijent o = (JSONKlijent) lv.getItemAtPosition(i);
 
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("OPERATER", (Serializable) logovani_operater);
+                bundle.putInt("id_klijent", o.id_klijent);
                 Intent intent = new Intent(getApplicationContext(),KnjigeActivity.class);
-                intent.putExtra("id_klijent", o.id_klijent);
+                //intent.putExtra("id_klijent", o.id_klijent);
+                intent.putExtras(bundle);
                 startActivity(intent);
             }
         });

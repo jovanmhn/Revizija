@@ -369,7 +369,7 @@ public class API
             return new APIKnjigeResult(LoginResult.ServerError, lista_knjiga);
         }
     }
-    public static LoginResult UploadImage(Context context,int id_knjiga, byte[] imageInBytes, String naziv)
+    public static LoginResult UploadImage(Context context,int id_knjiga, byte[] imageInBytes, String naziv, int id_operater)
     {
         HttpURLConnection urlConnection = null;
         ArrayList<JSONKnjiga> lista_knjiga = new ArrayList<JSONKnjiga>();
@@ -383,7 +383,8 @@ public class API
                 .appendPath("knjigas")
                 .appendPath("upload")
                 .appendPath( String.valueOf(id_knjiga) )
-                .appendPath(naziv);
+                .appendPath(naziv)
+                .appendPath(String.valueOf(id_operater));
         //.appendQueryParameter("klijent", editText.getText().toString());
 
 
